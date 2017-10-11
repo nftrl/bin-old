@@ -21,12 +21,15 @@ def search(query, category='soeg/'):
     url = 'https://www.dba.dk/' + category + '?soeg=' + query
     try:
         r = requests.get(url)
-    except: # FIXME Specify exception
+    except OSError as e: 
+        # When there is no internet connection, the exception socket.gaierror
+        # is raised first, then another ~5 exceptions. I had trouble catching
+        # socket.gaierror, but it is a subclass of OSError.
         print()
-        print('An error occurred during requests.get(%s)' % (url))
-        print('Do you have an internet connection?')
+        print(e)
         print()
-        raise
+        print('An error occurred during requests.get(%s) in search(). Do you have an internet connection?' % (url))
+        raise KeyboardInterrupt # FIXME Do a proper clean exit...
 
     try:
         soup = bs4.BeautifulSoup(r.text, "lxml")
@@ -61,8 +64,7 @@ def search(query, category='soeg/'):
 
 
 if __name__ == '__main__':
-    # Read arguments
-    args = sys.argv[1:]
+    args = sys.argv[1:] # Read arguments
 
     if not args or args[0] == '--help':
         print('Usage: dba.py [--help] [ARGUMENT]...')
