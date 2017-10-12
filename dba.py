@@ -16,7 +16,10 @@ import json
 def search(query, category='soeg/'):
     # 'soeg/' is the default category
 
-    print('|+---> Search: ' + query)
+    if category == 'soeg/':
+        print('|+---> Search: ' + query)
+    else:
+        print('|+---> Search: ' + category + ', ' +  query) # FIXME print nicer
 
     url = 'https://www.dba.dk/' + category + '?soeg=' + query
     try:
@@ -73,9 +76,23 @@ if __name__ == '__main__':
         print('With --help option: print this and exit.')
         print('By Marcus Larsen')
     else:
+        cat = None
         for arg in args:
-            try:
-                search(arg)
-            except KeyboardInterrupt:
-                print()
-                break
+            if arg.split('=')[0] == '-category':
+                cat = arg.split('=')[1]
+                continue
+
+            if cat:
+                try:
+                    search(arg, cat)
+                except KeyboardInterrupt:
+                    print()
+                    break
+                finally:
+                    cat = None
+            else:
+                try:
+                    search(arg)
+                except KeyboardInterrupt:
+                    print()
+                    break
