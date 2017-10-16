@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """ TODO
-- add support for categories .... :^)
 - test for correct syntax on CATEGORY
 - proper formatted help message
 - add info about category when printing search query message
