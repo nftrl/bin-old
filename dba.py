@@ -85,17 +85,12 @@ if __name__ == '__main__':
                 cat = arg.split('=')[1]
                 continue
 
-            if cat:
-                try:
+            try:
+                if cat:
                     search(arg, cat)
-                except KeyboardInterrupt:
-                    print()
-                    break
-                finally:
                     cat = None
-            else:
-                try:
+                else:
                     search(arg)
-                except KeyboardInterrupt:
-                    print()
-                    break
+            except KeyboardInterrupt:
+                print()
+                break
