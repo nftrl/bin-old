@@ -46,10 +46,14 @@ def search(query, category='soeg/'):
         if td.get('class') and 'mainContent' in td.get('class'):
             count += 1
 
+            # Get raw data as string. It is formatted as json. Remove newline
+            # and carriage as they seem to cause an error and raise the
+            # exception json.decoder.JSONDecodeError.
             data_raw = td.script.string
+            data_raw = data_raw.replace('\n', ' ').replace('\r', ' ')
             try:
                 data = json.loads(data_raw)
-            except json.decoder.JSONDecodeError as e: # FIXME Print nice anyways?
+            except json.decoder.JSONDecodeError as e:
                 print('ERROR: json.decoder.JSONDecodeError: %s' % (e))
                 print('Raw json:')
                 print(data_raw) # Print raw json instead of nicely parsed
