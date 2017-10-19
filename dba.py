@@ -12,15 +12,34 @@ import bs4
 import json
 
 
-def search(query, category='soeg/'):
-    # 'soeg/' is the default category
+def print_header(text):
+    length = 84
+    textlength = len(text)
+    bar= '=' * ((length - textlength)//2 - 2)
 
-    if category == 'soeg/':
-        print('|+---> Search: ' + query)
-    else:
-        print('|+---> Search: ' + category + ', ' +  query) # FIXME print nicer
+    line = '%s %s %s' % (bar, text, bar)
+    if len(line) != 82:
+        line += '='
+    print(line)
+
+
+def search(query, category='soeg/'):
+    """Search dba.dk with query and category and print hits.
+    
+    'soeg/' is the default when no category is used in the search.
+    """
+
+    #if category == 'soeg/':
+    #    #print('|+---> Search: ' + query)
+    #    #print('============ %s ===============' % (query))
+    #    print_header(query)
+    #else:
+    #    #print('|+---> Search: ' + category + ', ' +  query) # FIXME print nicer
+    #    #print('============ %s: %s ===============' % (category, query))
+    #    print_header('%s : %s' % (category, query))
 
     url = 'https://www.dba.dk/' + category + '?soeg=' + query
+    print_header(url)
     try:
         r = requests.get(url)
     except OSError as e: 
