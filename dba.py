@@ -23,10 +23,10 @@ def print_header(text):
     print(line)
 
 
-def search(query, category='soeg/'):
+def search(query, category='soeg'):
     """Search dba.dk with query and category and print hits.
     
-    'soeg/' is the default when no category is used in the search.
+    'soeg' is the default when no category is used in the search.
     """
 
     #if category == 'soeg/':
@@ -38,7 +38,7 @@ def search(query, category='soeg/'):
     #    #print('============ %s: %s ===============' % (category, query))
     #    print_header('%s : %s' % (category, query))
 
-    url = 'https://www.dba.dk/' + category + '?soeg=' + query
+    url = 'https://www.dba.dk/%s?soeg=%s' % (category, query)
     print_header(url)
     try:
         r = requests.get(url)
