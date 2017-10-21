@@ -39,7 +39,8 @@ def search(query, category='soeg'):
     #    print_header('%s : %s' % (category, query))
 
     url = 'https://www.dba.dk/%s?soeg=%s' % (category, query)
-    print_header(url)
+    #print_header('%s?soeg=%s' % (category, query))
+    print_header('%s : %s' % (category, query))
     try:
         r = requests.get(url)
     except OSError as e: 
