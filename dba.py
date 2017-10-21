@@ -46,12 +46,13 @@ def search(query, category='soeg'):
     except OSError as e: 
         # When there is no internet connection, the exception socket.gaierror
         # is raised first, then another ~5 exceptions. I had trouble catching
-        # socket.gaierror, but it is a subclass of OSError.
+        # socket.gaierror, but it is a subclass of OSError. Print error message
+        # to stdout and exit with exit status 1.
         print()
         print(e)
         print()
         print('An error occurred during requests.get(%s) in search(). Do you have an internet connection?' % (url))
-        raise KeyboardInterrupt # FIXME Do a proper clean exit...
+        sys.exit(1)
 
     try:
         soup = bs4.BeautifulSoup(r.text, "lxml")
