@@ -81,9 +81,9 @@ def search(query, category='soeg'):
                 print()
                 continue # Skip the rest of this for loop iteration
 
-            print('text:\t' + data['name'])
-            print('url:\t' + data['url'])
-            print('price:\t' + data['offers']['price'] + ' ' + data['offers']['priceCurrency'])
+            print('text:\t%s' % (data['name']))
+            print('url:\t%s' % (data['url']))
+            print('price:\t%s %s' % (data['offers']['price'], data['offers']['priceCurrency']))
             print()
 
     if count == 0:
