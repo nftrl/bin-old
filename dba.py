@@ -29,18 +29,12 @@ def search(query, category='soeg'):
     'soeg' is the default when no category is used in the search.
     """
 
-    #if category == 'soeg/':
-    #    #print('|+---> Search: ' + query)
-    #    #print('============ %s ===============' % (query))
-    #    print_header(query)
-    #else:
-    #    #print('|+---> Search: ' + category + ', ' +  query) # FIXME print nicer
-    #    #print('============ %s: %s ===============' % (category, query))
-    #    print_header('%s : %s' % (category, query))
+    if category == 'soeg':
+        print_header(query)
+    else:
+        print_header('%s : %s' % (category, query))
 
     url = 'https://www.dba.dk/%s?soeg=%s' % (category, query)
-    #print_header('%s?soeg=%s' % (category, query))
-    print_header('%s : %s' % (category, query))
     try:
         r = requests.get(url)
     except OSError as e: 
