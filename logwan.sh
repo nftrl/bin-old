@@ -21,11 +21,22 @@ fi
 INTERFACE="$1"
 LOGFILE="$2"
 
-# Get date and ip addresses. If an error happens, print error message and exit
-# with return value.
+function wanip {
+	# Get WAN ip address and print to stdout.
+	# First try with dig, then with curl.
+	if command -v dig >/dev/null 2>&1
+	then
+		dig +short myip.opendns.com @resolver1.opendns.com
+	elif command -v curl >/dev/null 2>&1
+	then
+		curl -s http://whatismyip.akamai.com/
+	fi
+}
+
+# Get date, LAN ip address and WAN ip address.
 DATE="$(date)"
 LAN="$(ifconfig "$INTERFACE" | nl | grep -E " 2" | grep -oE "(addr:.* B)" | grep -oE "([0-9]\.?)*")" || exit 2
-WAN="$(dig +short myip.opendns.com @resolver1.opendns.com)" || exit 3
+WAN="$(wanip)" || exit 3
 
 # Print output to stdout or LOGFILE
 if [ -z "$LOGFILE" ]
