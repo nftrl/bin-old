@@ -35,17 +35,18 @@ function wanip {
 
 # Get date, LAN ip address and WAN ip address.
 DATE="$(date)"
+ESSID="$(iwconfig "$INTERFACE" | grep -Eo "ESSID.*$" | grep -Eo "[\"].*[\"]" | grep -Eo "[^\"].*[^\"]")"
 LAN="$(ifconfig "$INTERFACE" | nl | grep -E " 2" | grep -oE "(addr:.* B)" | grep -oE "([0-9]\.?)*")" || exit 2
 WAN="$(wanip)" || exit 3
 
 # Print output to stdout or LOGFILE
 if [ -z "$LOGFILE" ]
 then
-	printf "DATE\t%b\nWAN \t%b\nLAN \t%b\n\n" "$DATE" "$WAN" "$LAN"
+	printf "DATE\t%b\nESSID\t%b\nWAN \t%b\nLAN \t%b\n\n" "$DATE" "$ESSID" "$WAN" "$LAN"
 else
 	# Create log file if it doesn't exist.
 	if [ ! -f "$LOGFILE" ]; then touch "$LOGFILE"; fi
-	printf "DATE\t%b\nWAN \t%b\nLAN \t%b\n\n" "$DATE" "$WAN" "$LAN" >> "$LOGFILE"
+	printf "DATE\t%b\nESSID\t%b\nWAN \t%b\nLAN \t%b\n\n" "$DATE" "$ESSID" "$WAN" "$LAN" >> "$LOGFILE"
 fi
 
 exit 0
