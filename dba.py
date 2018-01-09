@@ -4,6 +4,14 @@
 - test for correct syntax on CATEGORY
 - proper formatted help message
 - add info about category when printing search query message
+- make a blacklist
+    subtract ID from webaddr.
+    read IDs from blacklist, ignore comments
+    filter results acordingly
+    remove outdated IDs from blacklist, maybe to another file?  
+    Make a class blacklist with methods:
+        read - read the blacklist
+        remove - remove entry in blacklist
 """
 
 import sys
@@ -23,9 +31,20 @@ def print_header(text):
     print(line)
 
 
-def search(query, category='soeg'):
+def read_blacklist(path):
+    with open(path, 'r') as f:
+        blacklist = []
+        for line in f:
+            entry = line.strip()
+            if entry and not entry.startswith('#'):
+                blacklist.append(entry.split()[0])
+    return blacklist
+
+
+def search(query, blacklist=[], category='soeg'):
     """Search dba.dk with query and category and print hits.
     
+    blacklist is optional. Exclude entry from output if ID is in blacklist.
     'soeg' is the default when no category is used in the search.
     """
 
@@ -57,6 +76,7 @@ def search(query, category='soeg'):
             soup = bs4.BeautifulSoup(r.text)
 
     count = 0
+    blacklisted = 0
     for td in soup.find_all('td'):
         if td.get('class') and 'mainContent' in td.get('class'):
             count += 1
@@ -74,6 +94,15 @@ def search(query, category='soeg'):
                 print(data_raw) # Print raw json instead of nicely parsed
                 print()
                 continue # Skip the rest of this for loop iteration
+            
+            # Check if blacklisted
+            for part in data['url'].split('/'):
+                if part.startswith('id'):
+                    entry_id = part.split('-')[1]
+                    break
+            if entry_id in blacklist:
+                blacklisted += 1
+                continue
 
             print('text:\t%s' % (data['name']))
             print('url:\t%s' % (data['url']))
@@ -82,6 +111,8 @@ def search(query, category='soeg'):
 
     if count == 0:
         print('None\n')
+    elif blacklisted:
+        print('Blacklisted: %i\n' % (blacklisted))
 
 
 if __name__ == '__main__':
@@ -94,6 +125,8 @@ if __name__ == '__main__':
         print('With --help option: print this and exit.')
         print('By Marcus Larsen')
     else:
+        blacklist = read_blacklist('/home/nfooatrle/.binrc/dba-blacklist')
+
         cat = None
         for arg in args:
             if arg.split('=')[0] == '-category':
@@ -102,10 +135,10 @@ if __name__ == '__main__':
 
             try:
                 if cat:
-                    search(arg, cat)
+                    search(arg, blacklist, cat)
                     cat = None
                 else:
-                    search(arg)
+                    search(arg, blacklist)
             except KeyboardInterrupt:
                 print()
                 break
