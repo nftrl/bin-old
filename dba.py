@@ -4,14 +4,11 @@
 - test for correct syntax on CATEGORY
 - proper formatted help message
 - add info about category when printing search query message
-- make a blacklist
-    subtract ID from webaddr.
-    read IDs from blacklist, ignore comments
-    filter results acordingly
-    remove outdated IDs from blacklist, maybe to another file?  
-    Make a class blacklist with methods:
-        read - read the blacklist
-        remove - remove entry in blacklist
+- make a class blacklist with methods:
+    read - read the blacklist
+    remove - remove entry from blacklist. maybe add to another file? for use if
+        the id doesn't match any hits. maybe just comment it out.
+    log - used to log blacklisted hits, if one wished to see these
 """
 
 import sys
