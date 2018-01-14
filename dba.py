@@ -38,6 +38,12 @@ def read_blacklist(path):
     return blacklist
 
 
+def fixtext(text):
+    text = text.replace('&amp;#229;', 'å')
+    text = text.replace('&amp;#248;', 'ø')
+    text = text.replace('&amp;#230;', 'æ')
+    return text
+
 def search(query, blacklist=[], category='soeg'):
     """Search dba.dk with query and category and print hits.
     
@@ -101,7 +107,7 @@ def search(query, blacklist=[], category='soeg'):
                 blacklisted += 1
                 continue
 
-            print('text:\t%s' % (data['name']))
+            print('text:\t%s' % (fixtext(data['name'])))
             print('url:\t%s' % (data['url']))
             print('price:\t%s %s' % (data['offers']['price'], data['offers']['priceCurrency']))
             print()
